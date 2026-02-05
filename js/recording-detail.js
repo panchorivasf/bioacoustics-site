@@ -46,6 +46,14 @@ async function loadRecordingDetail(id) {
     const content = `
         <h1>${recording.title}</h1>
         
+        ${recording.xenoCantoUrl ? `
+            <div class="xc-link">
+                <a href="${recording.xenoCantoUrl}" target="_blank" class="btn btn-primary">
+                    🔗 Ver en Xeno-canto
+                </a>
+            </div>
+        ` : ''}
+        
         ${audioUrl && spectrogramUrl ? `
             <div class="audio-player-container">
                 <div class="spectrogram-container">
@@ -55,7 +63,7 @@ async function loadRecordingDetail(id) {
                 
                 <div class="audio-controls">
                     <audio id="audioPlayer" preload="metadata">
-                        <source src="${audioUrl}" type="${audioData.type}">
+                        <source src="${audioUrl}" type="audio/mpeg">
                     </audio>
                     
                     <button id="playPauseBtn" class="btn-play">▶️ Reproducir</button>
@@ -67,7 +75,7 @@ async function loadRecordingDetail(id) {
         ` : audioUrl ? `
             <div class="audio-player-simple">
                 <audio controls>
-                    <source src="${audioUrl}" type="${audioData.type}">
+                    <source src="${audioUrl}" type="audio/mpeg">
                 </audio>
             </div>
         ` : ''}
@@ -108,13 +116,41 @@ async function loadRecordingDetail(id) {
                 </div>
             ` : ''}
             
+            ${recording.quality ? `
+                <div class="metadata-item">
+                    <strong>Calidad:</strong>
+                    <span>${recording.quality}</span>
+                </div>
+            ` : ''}
+            
+            ${recording.xcType ? `
+                <div class="metadata-item">
+                    <strong>Tipo de grabación:</strong>
+                    <span>${recording.xcType}</span>
+                </div>
+            ` : ''}
+            
             ${recording.latitude && recording.longitude ? `
                 <div class="metadata-item">
                     <strong>Coordenadas:</strong>
                     <span>${recording.latitude.toFixed(4)}, ${recording.longitude.toFixed(4)}</span>
                 </div>
             ` : ''}
+            
+            ${recording.xcNumber ? `
+                <div class="metadata-item">
+                    <strong>Xeno-canto:</strong>
+                    <span>XC${recording.xcNumber}</span>
+                </div>
+            ` : ''}
         </div>
+        
+        ${recording.remarks ? `
+            <div class="description-section">
+                <h3>Notas del grabador</h3>
+                <p>${recording.remarks}</p>
+            </div>
+        ` : ''}
         
         ${recording.description ? `
             <div class="description-section">
