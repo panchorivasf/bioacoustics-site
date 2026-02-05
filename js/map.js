@@ -3,6 +3,8 @@
 let mainMap = null;
 let markers = [];
 let markerCluster = null;
+let focalLayer = null;
+let soundscapeLayer = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initMainMap();
@@ -23,24 +25,35 @@ function initMainMap() {
         maxZoom: 18
     }).addTo(mainMap);
     
-    // Initialize marker cluster group
-    markerCluster = L.markerClusterGroup({
+    // Initialize separate marker cluster groups for each type
+    focalLayer = L.markerClusterGroup({
         chunkedLoading: true,
         spiderfyOnMaxZoom: true,
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true
     });
     
-    mainMap.addLayer(markerCluster);
+    soundscapeLayer = L.markerClusterGroup({
+        chunkedLoading: true,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true
+    });
+    
+    mainMap.addLayer(focalLayer);
+    mainMap.addLayer(soundscapeLayer);
 }
 
 async function loadMapRecordings() {
     const recordings = DB.getAllRecordings().filter(r => r.latitude && r.longitude);
     
+    const focalCount = recordings.filter(r => r.type === 'focal').length;
+    const soundscapeCount = recordings.filter(r => r.type === 'soundscape').length;
+    
     // Update stats
     const statsEl = document.getElementById('mapStats');
     if (statsEl) {
-        statsEl.textContent = `${recordings.length} grabaciones geolocalizadas`;
+        statsEl.textContent = `${focalCount} focales, ${soundscapeCount} paisajes sonoros`;
     }
     
     if (recordings.length === 0) {
@@ -50,10 +63,14 @@ async function loadMapRecordings() {
     markers = [];
     
     for (const rec of recordings) {
+        // Determine icon based on type
+        const iconEmoji = rec.type === 'soundscape' ? '🌳' : '🎵';
+        const iconClass = rec.type === 'soundscape' ? 'soundscape-icon' : 'focal-icon';
+        
         // Create custom icon
         const iconHtml = `
-            <div class="custom-marker">
-                🎵
+            <div class="custom-marker ${iconClass}">
+                ${iconEmoji}
             </div>
         `;
         
@@ -67,6 +84,7 @@ async function loadMapRecordings() {
         const marker = L.marker([rec.latitude, rec.longitude], { 
             icon: customIcon,
             recId: rec.id,
+            recType: rec.type,
             title: rec.title
         });
         
@@ -75,7 +93,13 @@ async function loadMapRecordings() {
         marker.bindPopup(popupContent);
         
         markers.push(marker);
-        markerCluster.addLayer(marker);
+        
+        // Add to appropriate layer
+        if (rec.type === 'soundscape') {
+            soundscapeLayer.addLayer(marker);
+        } else {
+            focalLayer.addLayer(marker);
+        }
     }
     
     // Fit bounds to show all markers
@@ -131,25 +155,64 @@ async function createPopupContent(rec) {
     `;
 }
 
+function updateMapFilters() {
+    const showFocal = document.getElementById('filterFocal').checked;
+    const showSoundscape = document.getElementById('filterSoundscape').checked;
+    
+    if (showFocal) {
+        mainMap.addLayer(focalLayer);
+    } else {
+        mainMap.removeLayer(focalLayer);
+    }
+    
+    if (showSoundscape) {
+        mainMap.addLayer(soundscapeLayer);
+    } else {
+        mainMap.removeLayer(soundscapeLayer);
+    }
+}
+
 function filterMapMarkers() {
     const query = document.getElementById('mapSearch').value.toLowerCase();
     
     if (!query) {
-        markerCluster.clearLayers();
-        markers.forEach(m => markerCluster.addLayer(m));
+        // Reset to show all based on current filter settings
+        updateMapFilters();
+        
+        const recordings = DB.getAllRecordings().filter(r => r.latitude && r.longitude);
+        const focalCount = recordings.filter(r => r.type === 'focal').length;
+        const soundscapeCount = recordings.filter(r => r.type === 'soundscape').length;
+        
+        const statsEl = document.getElementById('mapStats');
+        if (statsEl) {
+            statsEl.textContent = `${focalCount} focales, ${soundscapeCount} paisajes sonoros`;
+        }
         return;
     }
     
     const recordings = DB.searchRecordings(query).filter(r => r.latitude && r.longitude);
     const filteredIds = new Set(recordings.map(r => r.id));
     
-    markerCluster.clearLayers();
-    markers.filter(m => filteredIds.has(m.options.recId)).forEach(m => markerCluster.addLayer(m));
+    // Clear both layers
+    focalLayer.clearLayers();
+    soundscapeLayer.clearLayers();
+    
+    // Add only filtered markers back
+    markers.filter(m => filteredIds.has(m.options.recId)).forEach(m => {
+        if (m.options.recType === 'soundscape') {
+            soundscapeLayer.addLayer(m);
+        } else {
+            focalLayer.addLayer(m);
+        }
+    });
     
     // Update stats
+    const focalCount = recordings.filter(r => r.type === 'focal').length;
+    const soundscapeCount = recordings.filter(r => r.type === 'soundscape').length;
+    
     const statsEl = document.getElementById('mapStats');
     if (statsEl) {
-        statsEl.textContent = `${recordings.length} grabaciones encontradas`;
+        statsEl.textContent = `${focalCount} focales, ${soundscapeCount} paisajes sonoros encontrados`;
     }
 }
 

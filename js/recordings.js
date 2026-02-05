@@ -21,13 +21,18 @@ function displayRecordings(recordings) {
     
     container.innerHTML = recordings.map(rec => `
         <div class="public-recording-card" onclick="viewRecordingDetails('${rec.id}')">
-            <div class="recording-thumbnail">
+            <div class="recording-thumbnail ${rec.type === 'soundscape' ? 'soundscape-thumb' : 'focal-thumb'}">
                 ${rec.hasSpectrogram ? 
                     '<div class="thumbnail-placeholder">📊</div>' : 
-                    '<div class="thumbnail-placeholder">🎵</div>'}
+                    `<div class="thumbnail-placeholder">${rec.type === 'soundscape' ? '🌳' : '🎵'}</div>`}
             </div>
             <div class="recording-content">
-                <h3>${rec.title}</h3>
+                <div class="recording-title-row">
+                    <h3>${rec.title}</h3>
+                    <span class="type-badge ${rec.type === 'soundscape' ? 'type-soundscape' : 'type-focal'}">
+                        ${rec.type === 'soundscape' ? '🌳' : '🎵'}
+                    </span>
+                </div>
                 ${rec.species ? `<p class="species"><strong>Especie:</strong> ${rec.species}</p>` : ''}
                 ${rec.location ? `<p class="location">📍 ${rec.location}</p>` : ''}
                 <div class="recording-meta">

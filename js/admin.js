@@ -94,6 +94,9 @@ async function processUploadedFiles() {
                 s.name.startsWith(baseName)
             );
             
+            // Determine type based on duration (soundscapes are typically longer)
+            const recordingType = duration && duration > 60 ? 'soundscape' : 'focal';
+            
             // Create recording entry
             const recording = {
                 title: baseName.replace(/_/g, ' '),
@@ -101,6 +104,7 @@ async function processUploadedFiles() {
                 duration: duration,
                 hasAudio: true,
                 hasSpectrogram: !!spectrogram,
+                type: recordingType, // 'focal' or 'soundscape'
                 // Default empty geolocation - to be filled later
                 latitude: null,
                 longitude: null,
@@ -153,13 +157,23 @@ function loadRecordingsList() {
         return;
     }
     
-    container.innerHTML = recordings.map(rec => `
+    container.innerHTML = renderRecordingCards(recordings);
+}
+
+// Helper function to render recording cards
+function renderRecordingCards(recordings) {
+    return recordings.map(rec => `
         <div class="recording-card">
             <div class="recording-header">
                 <h3>${rec.title}</h3>
-                ${rec.latitude && rec.longitude ? 
-                    '<span class="badge badge-success">📍 Geolocalizado</span>' : 
-                    '<span class="badge badge-warning">⚠️ Sin ubicación</span>'}
+                <div class="badge-group">
+                    <span class="badge ${rec.type === 'soundscape' ? 'badge-soundscape' : 'badge-focal'}">
+                        ${rec.type === 'soundscape' ? '🌳 Paisaje' : '🎵 Focal'}
+                    </span>
+                    ${rec.latitude && rec.longitude ? 
+                        '<span class="badge badge-success">📍</span>' : 
+                        '<span class="badge badge-warning">⚠️</span>'}
+                </div>
             </div>
             <div class="recording-info">
                 ${rec.species ? `<p><strong>Especie:</strong> ${rec.species}</p>` : ''}
@@ -188,27 +202,7 @@ function filterRecordings() {
         return;
     }
     
-    container.innerHTML = recordings.map(rec => `
-        <div class="recording-card">
-            <div class="recording-header">
-                <h3>${rec.title}</h3>
-                ${rec.latitude && rec.longitude ? 
-                    '<span class="badge badge-success">📍 Geolocalizado</span>' : 
-                    '<span class="badge badge-warning">⚠️ Sin ubicación</span>'}
-            </div>
-            <div class="recording-info">
-                ${rec.species ? `<p><strong>Especie:</strong> ${rec.species}</p>` : ''}
-                ${rec.location ? `<p><strong>Ubicación:</strong> ${rec.location}</p>` : ''}
-                ${rec.latitude ? `<p><strong>Coords:</strong> ${rec.latitude.toFixed(4)}, ${rec.longitude.toFixed(4)}</p>` : ''}
-                <p><strong>Duración:</strong> ${rec.duration || '?'}s</p>
-            </div>
-            <div class="recording-actions">
-                <button onclick="editRecording('${rec.id}')" class="btn btn-sm btn-primary">✏️ Editar</button>
-                <button onclick="playRecording('${rec.id}')" class="btn btn-sm btn-secondary">▶️ Reproducir</button>
-                <button onclick="deleteRecording('${rec.id}')" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
-            </div>
-        </div>
-    `).join('');
+    container.innerHTML = renderRecordingCards(recordings);
 }
 
 // Edit recording
@@ -219,6 +213,7 @@ function editRecording(id) {
     // Fill form
     document.getElementById('editId').value = recording.id;
     document.getElementById('editTitle').value = recording.title || '';
+    document.getElementById('editType').value = recording.type || 'focal';
     document.getElementById('editSpecies').value = recording.species || '';
     document.getElementById('editLocation').value = recording.location || '';
     document.getElementById('editDate').value = recording.date || '';
@@ -309,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = document.getElementById('editId').value;
             const updates = {
                 title: document.getElementById('editTitle').value,
+                type: document.getElementById('editType').value,
                 species: document.getElementById('editSpecies').value,
                 location: document.getElementById('editLocation').value,
                 date: document.getElementById('editDate').value,

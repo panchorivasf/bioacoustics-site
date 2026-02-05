@@ -124,30 +124,39 @@
                         <input type="text" id="editTitle" required>
                     </div>
                     <div class="form-group">
-                        <label>Especie</label>
-                        <input type="text" id="editSpecies">
+                        <label>Tipo *</label>
+                        <select id="editType" required>
+                            <option value="focal">Grabación Focal</option>
+                            <option value="soundscape">Paisaje Sonoro</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
+                        <label>Especie</label>
+                        <input type="text" id="editSpecies">
+                    </div>
+                    <div class="form-group">
                         <label>Ubicación</label>
                         <input type="text" id="editLocation">
                     </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label>Fecha</label>
                         <input type="date" id="editDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Grabador</label>
+                        <input type="text" id="editRecordist">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Descripción</label>
                     <textarea id="editDescription" rows="4"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Grabador</label>
-                    <input type="text" id="editRecordist">
                 </div>
 
                 <div class="geolocation-section">

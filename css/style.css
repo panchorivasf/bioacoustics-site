@@ -330,10 +330,17 @@ h2 {
     margin: 0;
 }
 
+.badge-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .badge {
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .badge-success {
@@ -344,6 +351,16 @@ h2 {
 .badge-warning {
     background: #fff3cd;
     color: #856404;
+}
+
+.badge-focal {
+    background: #d6eaf8;
+    color: #1f618d;
+}
+
+.badge-soundscape {
+    background: #d5f4e6;
+    color: #0e6251;
 }
 
 .recording-info p {
@@ -642,11 +659,18 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .recording-thumbnail {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.focal-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.soundscape-thumb {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 .thumbnail-placeholder {
@@ -657,9 +681,22 @@ input[type="range"]::-moz-range-thumb {
     padding: 1.5rem;
 }
 
+.recording-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 0.5rem;
+}
+
 .recording-content h3 {
     margin: 0 0 0.5rem 0;
     color: #2c3e50;
+    flex: 1;
+}
+
+.type-badge {
+    font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .species {
@@ -720,6 +757,24 @@ input[type="range"]::-moz-range-thumb {
     color: #7f8c8d;
 }
 
+.map-filters-inline {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.map-filters-inline label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.map-filters-inline input[type="checkbox"] {
+    cursor: pointer;
+}
+
 .map-search input {
     padding: 0.75rem;
     border: 1px solid #ddd;
@@ -742,12 +797,21 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .legend-marker {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    font-size: 20px;
+}
+
+.focal-marker {
+    background: #3498db;
+}
+
+.soundscape-marker {
+    background: #27ae60;
 }
 
 /* Custom map marker */
@@ -766,6 +830,14 @@ input[type="range"]::-moz-range-thumb {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.custom-marker.focal-icon {
+    background: #3498db;
+}
+
+.custom-marker.soundscape-icon {
+    background: #27ae60;
 }
 
 /* Popup styles */

@@ -43,6 +43,16 @@
                 <div class="map-stats">
                     <span id="mapStats">Cargando...</span>
                 </div>
+                <div class="map-filters-inline">
+                    <label>
+                        <input type="checkbox" id="filterFocal" checked onchange="updateMapFilters()">
+                        <span>Grabaciones Focales</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="filterSoundscape" checked onchange="updateMapFilters()">
+                        <span>Paisajes Sonoros</span>
+                    </label>
+                </div>
                 <div class="map-search">
                     <input type="text" id="mapSearch" placeholder="Buscar por especie o ubicación...">
                 </div>
@@ -53,8 +63,12 @@
             <div class="map-legend">
                 <h3>Leyenda</h3>
                 <div class="legend-item">
-                    <span class="legend-marker" style="background: #2566CF;">🎵</span>
-                    <span>Grabaciones con audio</span>
+                    <span class="legend-marker focal-marker">🎵</span>
+                    <span>Grabaciones Focales</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-marker soundscape-marker">🌳</span>
+                    <span>Paisajes Sonoros</span>
                 </div>
             </div>
         </div>
