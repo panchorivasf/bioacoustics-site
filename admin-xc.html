@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Museo Bioacústico</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Simple password protection -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <h1>🔒 Admin Access</h1>
+            <p>Enter password to access admin panel</p>
+            <input type="password" id="passwordInput" placeholder="Password" onkeypress="if(event.key==='Enter') checkPassword()">
+            <button onclick="checkPassword()" class="btn btn-primary">Login</button>
+            <p class="login-hint">Default password: museo2025</p>
+        </div>
+    </div>
+
+    <div id="adminPanel" style="display: none;">
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Museo Bioacústico">
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="admin-xc.html" class="active">Admin Panel</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="container admin-panel">
+            <h1>Admin Panel - Xeno-canto Integration</h1>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('fetch')">📥 Import from Xeno-canto</button>
+                <button class="tab-btn" onclick="showTab('manage')">📝 Manage Collection</button>
+                <button class="tab-btn" onclick="showTab('settings')">⚙️ Settings</button>
+            </div>
+
+            <!-- Fetch Tab -->
+            <div id="fetchTab" class="tab-content active">
+                <h2>Import Recordings from Xeno-canto</h2>
+                
+                <div class="import-section">
+                    <h3>Method 1: Import by XC Numbers</h3>
+                    <p>Enter XC catalog numbers (one per line or comma-separated)</p>
+                    <textarea id="xcNumbersInput" rows="5" placeholder="XC123456
+XC789012
+XC345678"></textarea>
+                    <button onclick="fetchByXCNumbers()" class="btn btn-primary">Import These Recordings</button>
+                </div>
+
+                <div class="import-section">
+                    <h3>Method 2: Import by Recordist Name</h3>
+                    <p>Import all recordings by a specific recordist</p>
+                    <div class="form-row">
+                        <input type="text" id="recordistInput" placeholder="Recordist name" value="Museo Bioacústico">
+                        <button onclick="fetchByRecordist()" class="btn btn-primary">Fetch Recordings</button>
+                    </div>
+                </div>
+
+                <div class="import-section">
+                    <h3>Method 3: Search and Import</h3>
+                    <div class="search-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Species (Scientific name)</label>
+                                <input type="text" id="searchSpecies" placeholder="e.g., Scelorchilus rubecula">
+                            </div>
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text" id="searchCountry" placeholder="e.g., Chile">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="searchLocation" placeholder="e.g., Nahuelbuta">
+                            </div>
+                            <div class="form-group">
+                                <label>Quality (A-E)</label>
+                                <select id="searchQuality">
+                                    <option value="">Any</option>
+                                    <option value="A">A - Excellent</option>
+                                    <option value="B">B - Good</option>
+                                    <option value="C">C - Average</option>
+                                    <option value="D">D - Poor</option>
+                                    <option value="E">E - Very Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="searchXenoCanto()" class="btn btn-primary">Search Xeno-canto</button>
+                    </div>
+                </div>
+
+                <div id="fetchResults" class="fetch-results"></div>
+            </div>
+
+            <!-- Manage Tab -->
+            <div id="manageTab" class="tab-content">
+                <h2>Your Collection</h2>
+                
+                <div class="collection-stats">
+                    <div class="stat-card">
+                        <h3 id="totalRecordings">0</h3>
+                        <p>Total Recordings</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="focalCount">0</h3>
+                        <p>Focal Recordings</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="soundscapeCount">0</h3>
+                        <p>Soundscapes</p>
+                    </div>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="searchCollection" placeholder="Search your collection..." onkeyup="filterCollection()">
+                    <button onclick="exportCollection()" class="btn btn-secondary">📥 Export JSON</button>
+                    <button onclick="publishToSite()" class="btn btn-primary">🚀 Publish to Website</button>
+                </div>
+
+                <div id="collectionGrid" class="recordings-grid"></div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <h2>Settings</h2>
+                
+                <div class="settings-section">
+                    <h3>Xeno-canto API Key</h3>
+                    <p>Get your API key from: <a href="https://xeno-canto.org/account" target="_blank">xeno-canto.org/account</a></p>
+                    <div class="form-group">
+                        <label>API Key</label>
+                        <input type="text" id="xcApiKey" placeholder="Enter your Xeno-canto API key">
+                        <button onclick="saveApiKey()" class="btn btn-primary">Save API Key</button>
+                    </div>
+                    <p class="note"><strong>Note:</strong> API v2 may work without a key for basic searches. If you get authentication errors, add your key here.</p>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Collection Configuration</h3>
+                    <div class="form-group">
+                        <label>Default Recordist Name (for filtering)</label>
+                        <input type="text" id="defaultRecordist" value="Museo Bioacústico">
+                    </div>
+                    <div class="form-group">
+                        <label>Auto-approve Quality</label>
+                        <select id="autoApproveQuality">
+                            <option value="A">A only</option>
+                            <option value="B">A & B</option>
+                            <option value="C" selected>A, B & C</option>
+                            <option value="D">All except E</option>
+                            <option value="E">All qualities</option>
+                        </select>
+                    </div>
+                    <button onclick="saveSettings()" class="btn btn-primary">Save Settings</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Change Password</h3>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="newPassword">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPassword">
+                    </div>
+                    <button onclick="changePassword()" class="btn btn-primary">Update Password</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Danger Zone</h3>
+                    <button onclick="clearAllData()" class="btn btn-danger">⚠️ Clear All Collection Data</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closePreviewModal()">&times;</span>
+            <h2>Preview & Edit Recording</h2>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <script src="js/xeno-canto.js"></script>
+    <script src="js/admin-xc.js"></script>
+</body>
+</html>

@@ -11,9 +11,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.html" class="logo">
-                <img src="images/logo.png" alt="Museo Bioacústico">
-            </a>
+            <a href="index.html" class="logo">Museo Bioacústico</a>
             <ul class="nav-menu">
                 <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
                 <li><a href="map.html" data-i18n="nav.map">Mapa</a></li>
@@ -46,7 +44,7 @@
             <p>
                 Somos una organización sin fines de lucro dedicada al estudio, conservación y divulgación 
                 de los paisajes sonoros naturales. A través de la bioacústica y ecoacústica, trabajamos 
-                para documentar la diversidad acústica de Chile y utilizar el sonido como herramienta 
+                para documentar la diversidad acústica del planeta y utilizar el sonido como herramienta 
                 para la conservación.
             </p>
         </section>
@@ -89,12 +87,20 @@
 
     <script src="js/i18n.js"></script>
     <script src="js/db.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/public-loader.js"></script>
     <script>
         // Update recording count on homepage
-        document.addEventListener('DOMContentLoaded', () => {
-            const recordings = DB.getAllRecordings();
+        function onRecordingsLoaded() {
+            const recordings = PublicDB.getAllRecordings();
             document.getElementById('recordingCount').textContent = 
                 `${recordings.length} ${recordings.length === 1 ? 'grabación disponible' : 'grabaciones disponibles'}`;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof PublicDB !== 'undefined' && PublicDB.getAllRecordings().length > 0) {
+                onRecordingsLoaded();
+            }
         });
     </script>
 </body>
