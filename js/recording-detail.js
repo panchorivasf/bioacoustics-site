@@ -3,7 +3,8 @@
 let audio = null;
 let detailMap = null;
 
-document.addEventListener('DOMContentLoaded', async () => {
+// Wait for recordings to load
+function onRecordingsLoaded() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
     
@@ -12,30 +13,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     
-    await loadRecordingDetail(id);
+    loadRecordingDetail(id);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    
+    if (!id) {
+        document.getElementById('recordingContent').innerHTML = '<p class="error">Grabación no encontrada.</p>';
+        return;
+    }
+    
+    // Load if recordings already available
+    if (typeof PublicDB !== 'undefined' && PublicDB.getAllRecordings().length > 0) {
+        loadRecordingDetail(id);
+    }
 });
 
 async function loadRecordingDetail(id) {
-    const recording = DB.getRecording(id);
+    const recording = PublicDB.getRecording(id);
     
     if (!recording) {
         document.getElementById('recordingContent').innerHTML = '<p class="error">Grabación no encontrada.</p>';
         return;
     }
     
-    const audioData = recording.hasAudio ? await DB.getAudioFile(id) : null;
-    const spectrogramData = recording.hasSpectrogram ? await DB.getSpectrogram(id) : null;
-    
-    let audioUrl = '';
-    let spectrogramUrl = '';
-    
-    if (audioData) {
-        audioUrl = URL.createObjectURL(audioData.file);
-    }
-    
-    if (spectrogramData) {
-        spectrogramUrl = URL.createObjectURL(spectrogramData.file);
-    }
+    // Use direct URLs from Xeno-canto (no need to fetch from IndexedDB)
+    const audioUrl = recording.audioUrl;
+    const spectrogramUrl = recording.spectrogramUrl;
     
     const content = `
         <h1>${recording.title}</h1>

@@ -2,12 +2,20 @@
 
 let currentRecordings = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for recordings to load
+function onRecordingsLoaded() {
     loadPublicRecordings();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Load if already available
+    if (typeof PublicDB !== 'undefined' && PublicDB.getAllRecordings().length > 0) {
+        loadPublicRecordings();
+    }
 });
 
 function loadPublicRecordings() {
-    currentRecordings = DB.getAllRecordings();
+    currentRecordings = PublicDB.getAllRecordings();
     displayRecordings(currentRecordings);
 }
 

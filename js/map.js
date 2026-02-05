@@ -6,14 +6,23 @@ let markerCluster = null;
 let focalLayer = null;
 let soundscapeLayer = null;
 
+// Wait for recordings to load before initializing map
+function onRecordingsLoaded() {
+    loadMapRecordings();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initMainMap();
-    loadMapRecordings();
     
     // Search functionality
     const searchInput = document.getElementById('mapSearch');
     if (searchInput) {
         searchInput.addEventListener('input', filterMapMarkers);
+    }
+    
+    // Load recordings if already available, otherwise wait for onRecordingsLoaded
+    if (typeof PublicDB !== 'undefined' && PublicDB.getAllRecordings().length > 0) {
+        loadMapRecordings();
     }
 });
 
@@ -45,7 +54,7 @@ function initMainMap() {
 }
 
 async function loadMapRecordings() {
-    const recordings = DB.getAllRecordings().filter(r => r.latitude && r.longitude);
+    const recordings = PublicDB.getAllRecordings().filter(r => r.latitude && r.longitude);
     
     const focalCount = recordings.filter(r => r.type === 'focal').length;
     const soundscapeCount = recordings.filter(r => r.type === 'soundscape').length;
@@ -179,7 +188,7 @@ function filterMapMarkers() {
         // Reset to show all based on current filter settings
         updateMapFilters();
         
-        const recordings = DB.getAllRecordings().filter(r => r.latitude && r.longitude);
+        const recordings = PublicDB.getAllRecordings().filter(r => r.latitude && r.longitude);
         const focalCount = recordings.filter(r => r.type === 'focal').length;
         const soundscapeCount = recordings.filter(r => r.type === 'soundscape').length;
         
@@ -190,7 +199,7 @@ function filterMapMarkers() {
         return;
     }
     
-    const recordings = DB.searchRecordings(query).filter(r => r.latitude && r.longitude);
+    const recordings = PublicDB.searchRecordings(query).filter(r => r.latitude && r.longitude);
     const filteredIds = new Set(recordings.map(r => r.id));
     
     // Clear both layers
