@@ -1,3 +1,4 @@
+---Made with Claude.ai on Feb 2026---
 # Bioacoustics Organization Website
 
 A complete, self-contained website for managing and displaying bioacoustic recordings with admin interface, interactive maps, and multilingual support.
