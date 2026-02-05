@@ -43,6 +43,14 @@ body {
     text-decoration: none;
 }
 
+.logo img {
+    height: 40px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    display: block;
+}
+
 .nav-menu {
     display: flex;
     list-style: none;
