@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.default_lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ '/' | relative_url }}" class="logo">{{ site.title }}</a>
+            <ul class="nav-menu">
+                <li><a href="{{ '/map' | relative_url }}" data-i18n="nav.map">Mapa</a></li>
+                <li><a href="{{ '/recordings' | relative_url }}" data-i18n="nav.recordings">Grabaciones</a></li>
+                <li><a href="{{ '/soundscapes' | relative_url }}" data-i18n="nav.soundscapes">Paisajes Sonoros</a></li>
+                <li><a href="{{ '/people' | relative_url }}" data-i18n="nav.people">Personas</a></li>
+                <li><a href="{{ '/publications' | relative_url }}" data-i18n="nav.publications">Publicaciones</a></li>
+                <li><a href="{{ '/news' | relative_url }}" data-i18n="nav.news">Noticias</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="es" selected>Español</option>
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {{ content }}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 {{ site.title }}. <span data-i18n="footer.rights">Todos los derechos reservados</span>.</p>
+        </div>
+    </footer>
+
+    <script src="{{ '/assets/js/i18n.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

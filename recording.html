@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grabación - Bioacoustics</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Bioacoustics Organization</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="map.html">Mapa</a></li>
+                <li><a href="recordings.html">Grabaciones</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="recording-detail">
+            <a href="recordings.html" class="back-link">← Volver a grabaciones</a>
+            
+            <div id="recordingContent">
+                <p>Cargando...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bioacoustics Organization. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/db.js"></script>
+    <script src="js/recording-detail.js"></script>
+</body>
+</html>

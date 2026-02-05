@@ -1,0 +1,20 @@
+---
+layout: default
+title: Soundscapes
+lang: es
+---
+
+<h1 data-i18n="soundscapes.title">Paisajes Sonoros</h1>
+
+<p>Grabaciones continuas de ambientes naturales que capturan la diversidad acústica de ecosistemas completos.</p>
+
+<div class="grid">
+    {% for soundscape in site.soundscapes %}
+    <div class="card">
+        <h3>{{ soundscape.title }}</h3>
+        <p><strong>Ubicación:</strong> {{ soundscape.location }}</p>
+        <p><strong>Duración:</strong> {{ soundscape.duration | divided_by: 60 }} min</p>
+        <a href="{{ soundscape.url | relative_url }}">Escuchar →</a>
+    </div>
+    {% endfor %}
+</div>

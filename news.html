@@ -1,0 +1,64 @@
+---
+layout: default
+title: News
+lang: es
+---
+
+<h1 data-i18n="news.title">Noticias</h1>
+
+<div class="news-list">
+    {% for post in site.posts %}
+    <article class="news-item">
+        <h2>{{ post.title }}</h2>
+        <p class="date">{{ post.date | date: "%d de %B, %Y" }}</p>
+        <div class="excerpt">
+            {{ post.excerpt }}
+        </div>
+        <a href="{{ post.url | relative_url }}" class="read-more">Leer más →</a>
+    </article>
+    {% endfor %}
+    
+    {% if site.posts.size == 0 %}
+    <p>No hay noticias disponibles aún. ¡Vuelve pronto!</p>
+    {% endif %}
+</div>
+
+<style>
+.news-list {
+    max-width: 800px;
+}
+
+.news-item {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.news-item h2 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.date {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0 0 1rem 0;
+}
+
+.excerpt {
+    line-height: 1.6;
+    margin: 1rem 0;
+}
+
+.read-more {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+</style>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Grabaciones - Bioacoustics</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Bioacoustics Organization</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="map.html" class="active" data-i18n="nav.map">Mapa</a></li>
+                <li><a href="recordings.html" data-i18n="nav.recordings">Grabaciones</a></li>
+                <li><a href="people.html" data-i18n="nav.people">Personas</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="es" selected>Español</option>
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="map-page">
+            <h1 data-i18n="map.title">Mapa de Grabaciones</h1>
+            
+            <div class="map-controls">
+                <div class="map-stats">
+                    <span id="mapStats">Cargando...</span>
+                </div>
+                <div class="map-search">
+                    <input type="text" id="mapSearch" placeholder="Buscar por especie o ubicación...">
+                </div>
+            </div>
+            
+            <div id="recordingMap" style="height: 600px; width: 100%;"></div>
+            
+            <div class="map-legend">
+                <h3>Leyenda</h3>
+                <div class="legend-item">
+                    <span class="legend-marker" style="background: #2566CF;">🎵</span>
+                    <span>Grabaciones con audio</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bioacoustics Organization. <span data-i18n="footer.rights">Todos los derechos reservados</span>.</p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>

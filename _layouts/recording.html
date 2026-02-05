@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.default_lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ '/' | relative_url }}" class="logo">{{ site.title }}</a>
+            <ul class="nav-menu">
+                <li><a href="{{ '/map' | relative_url }}">Mapa</a></li>
+                <li><a href="{{ '/recordings' | relative_url }}">Grabaciones</a></li>
+                <li><a href="{{ '/soundscapes' | relative_url }}">Paisajes Sonoros</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <article class="recording-detail">
+            <h1>{{ page.title }}</h1>
+            
+            <div class="audio-player-container">
+                <div class="spectrogram-container">
+                    <img src="{{ page.spectrogram | relative_url }}" alt="Spectrogram" class="spectrogram">
+                    <div class="progress-line" id="progressLine"></div>
+                </div>
+                
+                <div class="audio-controls">
+                    <audio id="audioPlayer" preload="metadata">
+                        <source src="{{ page.audio | relative_url }}" type="audio/mpeg">
+                        <source src="{{ page.audio | relative_url }}" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
+                    <button id="playPauseBtn" class="btn-play">▶️ Play</button>
+                    <input type="range" id="seekBar" value="0" max="100" step="0.1">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                    <input type="range" id="volumeBar" value="100" max="100" step="1">
+                </div>
+            </div>
+
+            <div class="metadata">
+                <p><strong>Especie:</strong> {{ page.species }}</p>
+                <p><strong>Ubicación:</strong> {{ page.location }}</p>
+                <p><strong>Fecha:</strong> {{ page.date }}</p>
+                <p><strong>Coordenadas:</strong> {{ page.latitude }}, {{ page.longitude }}</p>
+                {% if page.recordist %}<p><strong>Grabador:</strong> {{ page.recordist }}</p>{% endif %}
+                {% if page.equipment %}<p><strong>Equipo:</strong> {{ page.equipment }}</p>{% endif %}
+            </div>
+
+            <div class="description">
+                {{ content }}
+            </div>
+        </article>
+    </main>
+
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const seekBar = document.getElementById('seekBar');
+        const volumeBar = document.getElementById('volumeBar');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+        const progressLine = document.getElementById('progressLine');
+        const spectrogramContainer = document.querySelector('.spectrogram-container');
+
+        // Play/Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.textContent = '⏸️ Pause';
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = '▶️ Play';
+            }
+        });
+
+        // Update time and progress line
+        audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            seekBar.value = percent;
+            
+            // Update progress line on spectrogram
+            const linePosition = (audio.currentTime / audio.duration) * spectrogramContainer.offsetWidth;
+            progressLine.style.left = linePosition + 'px';
+            
+            currentTimeSpan.textContent = formatTime(audio.currentTime);
+        });
+
+        // Load duration
+        audio.addEventListener('loadedmetadata', () => {
+            durationSpan.textContent = formatTime(audio.duration);
+        });
+
+        // Seek
+        seekBar.addEventListener('input', () => {
+            const time = (seekBar.value / 100) * audio.duration;
+            audio.currentTime = time;
+        });
+
+        // Volume
+        volumeBar.addEventListener('input', () => {
+            audio.volume = volumeBar.value / 100;
+        });
+
+        // Click on spectrogram to seek
+        spectrogramContainer.addEventListener('click', (e) => {
+            const rect = spectrogramContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percent = x / rect.width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>

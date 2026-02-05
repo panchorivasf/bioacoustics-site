@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioacoustics Organization</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Bioacoustics Organization</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="map.html" data-i18n="nav.map">Mapa</a></li>
+                <li><a href="recordings.html" data-i18n="nav.recordings">Grabaciones</a></li>
+                <li><a href="people.html" data-i18n="nav.people">Personas</a></li>
+                <li><a href="admin.html" class="admin-link" data-i18n="nav.admin">Admin</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="es" selected>Español</option>
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Organización de Bioacústica y Ecoacústica</h1>
+            <p class="lead">Conservando la biodiversidad a través del sonido</p>
+        </div>
+
+        <section class="intro">
+            <h2>Nuestra Misión</h2>
+            <p>
+                Somos una organización sin fines de lucro dedicada al estudio, conservación y divulgación 
+                de los paisajes sonoros naturales. A través de la bioacústica y ecoacústica, trabajamos 
+                para documentar la diversidad acústica del planeta y utilizar el sonido como herramienta 
+                para la conservación.
+            </p>
+        </section>
+
+        <section class="features">
+            <h2>Explora Nuestra Colección</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>🎵 Grabaciones</h3>
+                    <p id="recordingCount">0 grabaciones disponibles</p>
+                    <a href="recordings.html">Ver grabaciones →</a>
+                </div>
+                
+                <div class="card">
+                    <h3>🗺️ Mapa Interactivo</h3>
+                    <p>Explora todas nuestras grabaciones en un mapa mundial.</p>
+                    <a href="map.html">Ver mapa →</a>
+                </div>
+                
+                <div class="card">
+                    <h3>👥 Nuestro Equipo</h3>
+                    <p>Conoce a las personas detrás de esta iniciativa.</p>
+                    <a href="people.html">Conocer equipo →</a>
+                </div>
+                
+                <div class="card">
+                    <h3>⚙️ Administración</h3>
+                    <p>Gestiona grabaciones y contenido del sitio.</p>
+                    <a href="admin.html">Ir a Admin →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bioacoustics Organization. <span data-i18n="footer.rights">Todos los derechos reservados</span>.</p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/db.js"></script>
+    <script>
+        // Update recording count on homepage
+        document.addEventListener('DOMContentLoaded', () => {
+            const recordings = DB.getAllRecordings();
+            document.getElementById('recordingCount').textContent = 
+                `${recordings.length} ${recordings.length === 1 ? 'grabación disponible' : 'grabaciones disponibles'}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Equipo - Bioacoustics</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Bioacoustics Organization</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="map.html">Mapa</a></li>
+                <li><a href="recordings.html">Grabaciones</a></li>
+                <li><a href="people.html" class="active">Personas</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="es" selected>Español</option>
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Nuestro Equipo</h1>
+        <p style="margin-bottom: 2rem;">Conoce a las personas detrás de nuestra organización de bioacústica.</p>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Dr. María González</h3>
+                <p><strong>Directora Ejecutiva</strong></p>
+                <p>Especialista en ecoacústica de bosques templados con 15 años de experiencia en monitoreo de biodiversidad acústica.</p>
+                <p>📧 maria@bioacoustics.org</p>
+            </div>
+            
+            <div class="card">
+                <h3>Dr. Carlos Rodríguez</h3>
+                <p><strong>Director Científico</strong></p>
+                <p>Experto en bioacústica de anfibios y análisis de paisajes sonoros. PhD en Ecología Acústica.</p>
+                <p>📧 carlos@bioacoustics.org</p>
+            </div>
+            
+            <div class="card">
+                <h3>Laura Silva</h3>
+                <p><strong>Coordinadora de Campo</strong></p>
+                <p>Bióloga de campo especializada en grabación de audio en ambientes remotos y formación de técnicos locales.</p>
+                <p>📧 laura@bioacoustics.org</p>
+            </div>
+            
+            <div class="card">
+                <h3>Dr. James Wilson</h3>
+                <p><strong>Analista de Datos</strong></p>
+                <p>Especialista en machine learning aplicado al reconocimiento automático de especies mediante vocalizaciones.</p>
+                <p>📧 james@bioacoustics.org</p>
+            </div>
+        </div>
+
+        <section style="margin-top: 3rem;">
+            <h2>Colaboradores</h2>
+            <p>Trabajamos con una red global de investigadores, instituciones y organizaciones de conservación comprometidos con la documentación y preservación de los paisajes sonoros naturales.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bioacoustics Organization. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+</body>
+</html>

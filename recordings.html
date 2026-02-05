@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grabaciones - Bioacoustics</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Bioacoustics Organization</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="map.html" data-i18n="nav.map">Mapa</a></li>
+                <li><a href="recordings.html" class="active" data-i18n="nav.recordings">Grabaciones</a></li>
+                <li><a href="people.html" data-i18n="nav.people">Personas</a></li>
+            </ul>
+            <div class="lang-switcher">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="es" selected>Español</option>
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1 data-i18n="recordings.title">Grabaciones</h1>
+        
+        <div class="recordings-header">
+            <div class="search-bar">
+                <input type="text" id="searchRecordings" placeholder="Buscar por título, especie o ubicación..." 
+                       onkeyup="searchPublicRecordings()">
+            </div>
+            <div class="sort-controls">
+                <label>Ordenar por:</label>
+                <select id="sortBy" onchange="sortRecordings()">
+                    <option value="recent">Más recientes</option>
+                    <option value="title">Título (A-Z)</option>
+                    <option value="species">Especie (A-Z)</option>
+                    <option value="location">Ubicación (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="recordingsGrid" class="public-recordings-grid"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bioacoustics Organization. <span data-i18n="footer.rights">Todos los derechos reservados</span>.</p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/recordings.js"></script>
+</body>
+</html>

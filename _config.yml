@@ -1,0 +1,33 @@
+title: "Bioacoustics Organization"
+description: "Non-profit organization for bioacoustics and ecoacoustics research"
+baseurl: ""
+url: "https://yourusername.github.io"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Collections
+collections:
+  recordings:
+    output: true
+    permalink: /recordings/:name
+  soundscapes:
+    output: true
+    permalink: /soundscapes/:name
+  people:
+    output: true
+    permalink: /people/:name
+
+# Exclude files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules
+
+# Languages
+languages: ["es", "pt", "en", "fr", "de", "zh", "ja"]
+default_lang: "es"
