@@ -2,9 +2,9 @@
   {
     "id": "xc_1077647",
     "xcNumber": "1077647",
-    "title": "Soundscape",
-    "species": "Soundscape (Sonus naturalis)",
-    "scientificName": "Sonus naturalis",
+    "title": "Laguna Lencán",
+    "species": "Soundscape ()",
+    "scientificName": "",
     "commonName": "Soundscape",
     "location": "Cañete, Arauco, Bío Bío, Chile",
     "country": "Chile",
@@ -15,13 +15,13 @@
     "longitude": -73.4739,
     "recordist": "Francisco Rivas Fuenzalida",
     "duration": 18,
-    "type": "focal",
+    "type": "soundscape",
     "xcType": "",
     "quality": "A",
     "audioUrl": "https://xeno-canto.org/1077647/download",
     "spectrogramUrl": "https://xeno-canto.org/sounds/uploaded/HFAIUBMLBS/ffts/XC1077647-large.png",
     "recordingMethod": "",
-    "remarks": "",
+    "remarks": "En esta grabación, registrada a orillas de la Laguna Lencán, podemos escuchar los graves croares del Yeco _(Nannopterum brasilianum)_, acompañados por los llamados de contacto del Pato Jergón Grande _(Anas georgica)_.",
     "backgroundSpecies": [
       "Anas georgica",
       "Nannopterum brasilianum",
@@ -34,15 +34,15 @@
     "source": "xeno-canto",
     "xenoCantoUrl": "https://xeno-canto.org/1077647",
     "licenseUrl": "//creativecommons.org/licenses/by-nc/4.0/",
-    "createdAt": "2026-02-05T05:47:39.848Z"
+    "createdAt": "2026-02-05T23:36:23.991Z"
   },
   {
     "id": "xc_1033657",
     "xcNumber": "1033657",
-    "title": "Pterophylla camellifolia - calling song",
-    "species": "Pterophylla camellifolia",
+    "title": "Saltamontes de árbol",
+    "species": "True Katydid (Pterophylla camellifolia)",
     "scientificName": "Pterophylla camellifolia",
-    "commonName": "",
+    "commonName": "True Katydid",
     "location": "Fairfield Township (near  Lafayette), Tippecanoe County, Indiana, United States",
     "country": "United States",
     "locality": "Fairfield Township (near  Lafayette), Tippecanoe County, Indiana",
@@ -58,7 +58,7 @@
     "audioUrl": "https://xeno-canto.org/1033657/download",
     "spectrogramUrl": "https://xeno-canto.org/sounds/uploaded/HFAIUBMLBS/ffts/XC1033657-large.png",
     "recordingMethod": "field recording",
-    "remarks": "",
+    "remarks": "El nombre común de esta especie es una mnemotecnia \"Katy-did\" que por extensión le da nombre a toda la familia Tettigoniidae en Norteamérica. ",
     "backgroundSpecies": [],
     "playbackUsed": "no",
     "animalSeen": "no",
@@ -67,15 +67,15 @@
     "source": "xeno-canto",
     "xenoCantoUrl": "https://xeno-canto.org/1033657",
     "licenseUrl": "//creativecommons.org/licenses/by-nc-sa/4.0/",
-    "createdAt": "2026-02-05T05:47:39.693Z"
+    "createdAt": "2026-02-05T23:36:24.144Z"
   },
   {
     "id": "xc_114883",
     "xcNumber": "114883",
-    "title": "Dusky Tapaculo - song",
-    "species": "Dusky Tapaculo (Scytalopus fuscus)",
+    "title": "Churrín del Norte",
+    "species": "Churrín del Norte (Scytalopus fuscus)",
     "scientificName": "Scytalopus fuscus",
-    "commonName": "Dusky Tapaculo",
+    "commonName": "Churrín del Norte",
     "location": "Melosilla , Chile",
     "country": "Chile",
     "locality": "Melosilla ",
@@ -100,6 +100,6 @@
     "source": "xeno-canto",
     "xenoCantoUrl": "https://xeno-canto.org/114883",
     "licenseUrl": "//creativecommons.org/licenses/by-nc-sa/3.0/",
-    "createdAt": "2026-02-05T22:52:14.078Z"
+    "createdAt": "2026-02-05T23:36:24.293Z"
   }
 ]
