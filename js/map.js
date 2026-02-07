@@ -119,7 +119,7 @@ async function loadMapRecordings() {
 }
 
 async function createPopupContent(rec) {
-    // Check for local spectrogram
+    // Check ONLY for custom local spectrogram (ignore XC spectrograms)
     let spectrogramUrl = null;
     if (rec.xcNumber) {
         const localSpectrogram = `images/spectrograms/spectrogram_XC${rec.xcNumber}.png`;
@@ -127,14 +127,12 @@ async function createPopupContent(rec) {
             const response = await fetch(localSpectrogram, { method: 'HEAD' });
             if (response.ok) {
                 spectrogramUrl = localSpectrogram;
-            } else {
-                spectrogramUrl = rec.spectrogramUrl;
             }
+            // If not found, spectrogramUrl stays null
         } catch {
-            spectrogramUrl = rec.spectrogramUrl;
+            // No custom spectrogram available
+            spectrogramUrl = null;
         }
-    } else {
-        spectrogramUrl = rec.spectrogramUrl;
     }
     
     return `

@@ -63,30 +63,22 @@ async function loadRecordingDetail(id) {
         return;
     }
     
-    // Use direct URLs from Xeno-canto
-    const audioUrl = recording.audioUrl;
-    
-    // Check for custom local spectrogram first, then XC spectrogram
+    // Check ONLY for custom local spectrogram (ignore XC spectrograms)
     let spectrogramUrl = null;
     if (recording.xcNumber) {
-        // Try local spectrogram first
         const localSpectrogram = `images/spectrograms/spectrogram_XC${recording.xcNumber}.png`;
         
-        // Test if file exists
+        // Test if local file exists
         try {
             const response = await fetch(localSpectrogram, { method: 'HEAD' });
             if (response.ok) {
                 spectrogramUrl = localSpectrogram;
-            } else {
-                // Fallback to XC spectrogram
-                spectrogramUrl = recording.spectrogramUrl;
             }
+            // If not found, spectrogramUrl stays null (we won't use XC's)
         } catch {
-            // Fallback to XC spectrogram
-            spectrogramUrl = recording.spectrogramUrl;
+            // No custom spectrogram available
+            spectrogramUrl = null;
         }
-    } else {
-        spectrogramUrl = recording.spectrogramUrl;
     }
     
     const content = `
@@ -112,7 +104,7 @@ async function loadRecordingDetail(id) {
                 <h3>Audio</h3>
                 <iframe src='https://xeno-canto.org/${recording.xcNumber}/embed?simple=1' scrolling='no' frameborder='0' width='900' height='150'></iframe>
             </div>
-        ` : audioUrl ? `
+        ` : recording.audioUrl ? `
             <div class="audio-player-simple">
                 <h3>Audio</h3>
                 <audio controls>
