@@ -3,6 +3,30 @@
 let audio = null;
 let detailMap = null;
 
+// Format text with basic markdown-style formatting
+function formatText(text) {
+    if (!text) return '';
+    
+    // Escape HTML first
+    text = text.replace(/&/g, '&amp;')
+               .replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;');
+    
+    // Apply markdown-style formatting
+    // Bold: **text** or __text__
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+               .replace(/__(.+?)__/g, '<strong>$1</strong>');
+    
+    // Italic: *text* or _text_
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>')
+               .replace(/_(.+?)_/g, '<em>$1</em>');
+    
+    // Line breaks
+    text = text.replace(/\n/g, '<br>');
+    
+    return text;
+}
+
 // Wait for recordings to load
 function onRecordingsLoaded() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -39,9 +63,31 @@ async function loadRecordingDetail(id) {
         return;
     }
     
-    // Use direct URLs from Xeno-canto (no need to fetch from IndexedDB)
+    // Use direct URLs from Xeno-canto
     const audioUrl = recording.audioUrl;
-    const spectrogramUrl = recording.spectrogramUrl;
+    
+    // Check for custom local spectrogram first, then XC spectrogram
+    let spectrogramUrl = null;
+    if (recording.xcNumber) {
+        // Try local spectrogram first
+        const localSpectrogram = `images/spectrograms/spectrogram_XC${recording.xcNumber}.png`;
+        
+        // Test if file exists
+        try {
+            const response = await fetch(localSpectrogram, { method: 'HEAD' });
+            if (response.ok) {
+                spectrogramUrl = localSpectrogram;
+            } else {
+                // Fallback to XC spectrogram
+                spectrogramUrl = recording.spectrogramUrl;
+            }
+        } catch {
+            // Fallback to XC spectrogram
+            spectrogramUrl = recording.spectrogramUrl;
+        }
+    } else {
+        spectrogramUrl = recording.spectrogramUrl;
+    }
     
     const content = `
         <h1>${recording.title}</h1>
@@ -54,26 +100,21 @@ async function loadRecordingDetail(id) {
             </div>
         ` : ''}
         
-        ${audioUrl && spectrogramUrl ? `
-            <div class="audio-player-container">
-                <div class="spectrogram-container">
-                    <img src="${spectrogramUrl}" alt="Espectrograma" class="spectrogram" id="spectrogram">
-                    <div class="progress-line" id="progressLine"></div>
-                </div>
-                
-                <div class="audio-controls">
-                    <audio id="audioPlayer" preload="metadata">
-                        <source src="${audioUrl}" type="audio/mpeg">
-                    </audio>
-                    
-                    <button id="playPauseBtn" class="btn-play">▶️ Reproducir</button>
-                    <input type="range" id="seekBar" value="0" max="100" step="0.1">
-                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
-                    <input type="range" id="volumeBar" value="100" max="100" step="1" title="Volumen">
-                </div>
+        ${spectrogramUrl ? `
+            <div class="spectrogram-display">
+                <h3>Espectrograma</h3>
+                <img src="${spectrogramUrl}" alt="Espectrograma" class="spectrogram">
+            </div>
+        ` : ''}
+        
+        ${recording.xcNumber ? `
+            <div class="xc-player">
+                <h3>Audio</h3>
+                <iframe src='https://xeno-canto.org/${recording.xcNumber}/embed?simple=1' scrolling='no' frameborder='0' width='900' height='150'></iframe>
             </div>
         ` : audioUrl ? `
             <div class="audio-player-simple">
+                <h3>Audio</h3>
                 <audio controls>
                     <source src="${audioUrl}" type="audio/mpeg">
                 </audio>
@@ -148,14 +189,14 @@ async function loadRecordingDetail(id) {
         ${recording.remarks ? `
             <div class="description-section">
                 <h3>Notas del grabador</h3>
-                <p>${recording.remarks}</p>
+                <p>${formatText(recording.remarks)}</p>
             </div>
         ` : ''}
         
         ${recording.description ? `
             <div class="description-section">
                 <h2>Descripción</h2>
-                <p>${recording.description}</p>
+                <p>${formatText(recording.description)}</p>
             </div>
         ` : ''}
         

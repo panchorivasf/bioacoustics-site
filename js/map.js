@@ -119,19 +119,22 @@ async function loadMapRecordings() {
 }
 
 async function createPopupContent(rec) {
-    const hasAudio = rec.hasAudio;
-    const audioData = hasAudio ? await DB.getAudioFile(rec.id) : null;
-    const spectrogramData = rec.hasSpectrogram ? await DB.getSpectrogram(rec.id) : null;
-    
-    let audioUrl = '';
-    let spectrogramUrl = '';
-    
-    if (audioData) {
-        audioUrl = URL.createObjectURL(audioData.file);
-    }
-    
-    if (spectrogramData) {
-        spectrogramUrl = URL.createObjectURL(spectrogramData.file);
+    // Check for local spectrogram
+    let spectrogramUrl = null;
+    if (rec.xcNumber) {
+        const localSpectrogram = `images/spectrograms/spectrogram_XC${rec.xcNumber}.png`;
+        try {
+            const response = await fetch(localSpectrogram, { method: 'HEAD' });
+            if (response.ok) {
+                spectrogramUrl = localSpectrogram;
+            } else {
+                spectrogramUrl = rec.spectrogramUrl;
+            }
+        } catch {
+            spectrogramUrl = rec.spectrogramUrl;
+        }
+    } else {
+        spectrogramUrl = rec.spectrogramUrl;
     }
     
     return `
@@ -139,27 +142,20 @@ async function createPopupContent(rec) {
             <h3>${rec.title}</h3>
             ${rec.species ? `<p><strong>Especie:</strong> ${rec.species}</p>` : ''}
             ${rec.location ? `<p><strong>Ubicación:</strong> ${rec.location}</p>` : ''}
-            ${rec.date ? `<p><strong>Fecha:</strong> ${rec.date}</p>` : ''}
-            ${rec.recordist ? `<p><strong>Grabador:</strong> ${rec.recordist}</p>` : ''}
-            ${rec.duration ? `<p><strong>Duración:</strong> ${rec.duration}s</p>` : ''}
             
             ${spectrogramUrl ? `
                 <div class="popup-spectrogram">
-                    <img src="${spectrogramUrl}" alt="Espectrograma" style="width: 100%; max-width: 300px;">
+                    <img src="${spectrogramUrl}" alt="Espectrograma" style="width: 100%; max-width: 400px;">
                 </div>
             ` : ''}
             
-            ${audioUrl ? `
-                <div class="popup-audio">
-                    <audio controls style="width: 100%;">
-                        <source src="${audioUrl}" type="${audioData.type}">
-                    </audio>
+            ${rec.xcNumber ? `
+                <div class="popup-player">
+                    <iframe src='https://xeno-canto.org/${rec.xcNumber}/embed?simple=1' scrolling='no' frameborder='0' width='340' height='115'></iframe>
                 </div>
             ` : ''}
             
-            <div class="popup-actions">
-                <button onclick="viewRecordingDetails('${rec.id}')" class="btn btn-sm">Ver detalles →</button>
-            </div>
+            <a href="recording.html?id=${rec.id}" class="btn btn-primary">Ver detalles</a>
         </div>
     `;
 }
