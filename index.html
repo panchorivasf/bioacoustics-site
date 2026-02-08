@@ -11,13 +11,15 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="index.html" class="logo">Museo Bioacústico</a>
+            <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Museo Bioacústico">
+                </a>
             <ul class="nav-menu">
                 <li><a href="index.html" data-i18n="nav.home">Inicio</a></li>
                 <li><a href="map.html" data-i18n="nav.map">Mapa</a></li>
                 <li><a href="recordings.html" data-i18n="nav.recordings">Grabaciones</a></li>
                 <li><a href="people.html" data-i18n="nav.people">Personas</a></li>
-                
+                <li><a href="admin.html" class="admin-link" data-i18n="nav.admin">Admin</a></li>
             </ul>
             <div class="lang-switcher">
                 <select id="langSelect" onchange="changeLanguage(this.value)">
@@ -69,12 +71,6 @@
                     <p>Conoce a las personas detrás de esta iniciativa.</p>
                     <a href="people.html">Conocer equipo →</a>
                 </div>
-                
-                <div class="card">
-                    <h3>⚙️ Administración</h3>
-                    <p>Gestiona grabaciones y contenido del sitio.</p>
-                    <a href="admin.html">Ir a Admin →</a>
-                </div>
             </div>
         </section>
     </main>
@@ -105,4 +101,3 @@
     </script>
 </body>
 </html>
-
